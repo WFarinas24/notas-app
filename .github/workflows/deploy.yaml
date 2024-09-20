@@ -33,7 +33,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        working-directory: notas-app
+        working-directory: ./app-notas
         run: npm ci
 
       - name: Build
