@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        working-directory: notas-app
+        working-directory: ./app-notas
         run: npm run build
 
       - name: List build files # Para asegurarte de que el build genera el directorio correcto
