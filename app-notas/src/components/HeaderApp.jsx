@@ -30,7 +30,7 @@ export const HeaderApp = ({setautenticado}) => {
           </button>
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className=" lg:flex lg:flex-1 lg:justify-end">
           <a
             onClick={() => {
               cerrarSesion();

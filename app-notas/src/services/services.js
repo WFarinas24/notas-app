@@ -23,7 +23,7 @@ export const ObtenerNotas = async () => {
 export const GuardarNota = async (texto) => {
   const { data, error } = await cliente
     .from("notas")
-    .insert([{usuario : ObtenerId(), nota_texto: cifrar(texto) }])
+    .insert([{usuario : ObtenerId(), nota_texto: cifrar(texto), favorito : false }])
     .select();
 
   return data;
