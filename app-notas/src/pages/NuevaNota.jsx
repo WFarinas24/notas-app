@@ -160,7 +160,7 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
                         }}
                         size={30}
                       />
-                      {x.favorito ? (
+                      {!x.favorito ? (
                         <MdStarBorder
                           className="hover:scale-125"
                           size={32}
