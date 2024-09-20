@@ -12,7 +12,7 @@ export const ObtenerNotas = async () => {
     .from("notas")
     .select("*")
     .eq("usuario", ObtenerId())
-    .order("favorito");
+    .order("favorito", { ascending: false });
 
     console.log(notas)
   return notas.map((x) => {
