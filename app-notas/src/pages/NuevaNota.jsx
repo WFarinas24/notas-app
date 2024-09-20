@@ -27,7 +27,7 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
   return (
     <>
       <HeaderApp setautenticado={setautenticado}></HeaderApp>
-      <Card className="mx-4 mt-4">
+      <Card className="mt-4">
         <h2 className="font-bold">Notas</h2>
         <div>
           <div className="mb-2 block">
@@ -66,10 +66,10 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
             </Alert>
           )}
 
-          <Table className="px-4">
+          <Table className="px-1">
             <Table.Head>
-              <Table.HeadCell className="w-52">Contenido</Table.HeadCell>
-              <Table.HeadCell>Fecha</Table.HeadCell>
+              <Table.HeadCell className="w-full">Contenido</Table.HeadCell>
+              <Table.HeadCell className="w-4">Fecha</Table.HeadCell>
               <Table.HeadCell className="w-10">Acciones</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
@@ -126,10 +126,10 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
                         </div>
                       )}
                     </Table.Cell>
-                    <Table.Cell className="w-40">
+                    <Table.Cell >
                       {new Date(x.created_at).toLocaleDateString("en-GB")}
                     </Table.Cell>
-                    <Table.Cell className="w-40 flex items-center">
+                    <Table.Cell className="flex items-center">
                       <MdContentCopy
                         className="hover:text-gray-800 hover:scale-125"
                         onClick={() => {
@@ -158,12 +158,12 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
                           actualizarTabla(await ObtenerNotas());
                           setCargando({ cargando: false, id: -1 });
                         }}
-                        size={30}
+                        size={26}
                       />
                       {!x.favorito ? (
                         <MdStarBorder
                           className="hover:scale-125"
-                          size={32}
+                          size={26}
                           onClick={async () => {
                             await EstablecerFavorito(x.id, !x.favorito);
                             actualizarTabla(await ObtenerNotas());
@@ -172,7 +172,7 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
                       ) : (
                         <MdStar
                           className="text-yellow-300 hover:scale-125"
-                          size={32}
+                          size={26}
                           onClick={async () => {
                             await EstablecerFavorito(x.id, !x.favorito);
                             actualizarTabla(await ObtenerNotas());
