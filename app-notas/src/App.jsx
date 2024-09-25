@@ -36,6 +36,7 @@ function App() {
             notas={notas}
             actualizarTabla={setNotas}
             setautenticado={setautenticado}
+            
           ></TabsComponent>
         </>
       ) : (

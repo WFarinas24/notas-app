@@ -32,8 +32,9 @@ export const TabsComponent = ({
       component: (
         <NuevaNota
           notas={notas}
-          actualizarTabla={setNotas}
+          actualizarTabla={actualizarTabla}
           setautenticado={setautenticado}
+
         ></NuevaNota>
       ),
     },
@@ -51,7 +52,7 @@ export const TabsComponent = ({
 
   return (
     <>
-      <ModalAgregarCategoria setOpenModal={setOpenModal} openModal={openModal} />
+      <ModalAgregarCategoria setPestania={setActiveTab} setOpenModal={setOpenModal} openModal={openModal} />
       <Tabs
         aria-label="Default tabs"
         variant="default"

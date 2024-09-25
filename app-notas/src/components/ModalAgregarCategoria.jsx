@@ -44,8 +44,11 @@ const badgeColors = [
   { text: "Rosa", color: "pink" },
 ];
 
-export function ModalAgregarCategoria({openModal, setOpenModal}) {
-
+export function ModalAgregarCategoria({
+  openModal,
+  setOpenModal,
+  setPestania,
+}) {
   const [data, setdata] = useState({
     icono: "default",
     color: "info",
@@ -57,7 +60,10 @@ export function ModalAgregarCategoria({openModal, setOpenModal}) {
         show={openModal}
         size="md"
         popup
-        onClose={() => setOpenModal(false)}
+        onClose={() => {
+          setOpenModal(false);
+          setPestania(0);
+        }}
       >
         <Modal.Header />
         <Modal.Body>
@@ -78,20 +84,29 @@ export function ModalAgregarCategoria({openModal, setOpenModal}) {
 
               <div className="flex flex-wrap gap-2">
                 {badgeColors.map((x) => {
-                  return <Badge onClick={()=> {
-                    setdata({...data, color : x.color})
-                  }} className="relative" key={x.color} color={x.color} size="sm">
-                    {x.text}
-                    {x.color == data.color && (
-                          <FaCheckCircle
-                            className="absolute"
-                            style={{
-                              right: "-4px",
-                              top: "-4px",
-                            }}
-                          />
-                        )}
-                  </Badge>;
+                  return (
+                    <Badge
+                      onClick={() => {
+                        setdata({ ...data, color: x.color });
+                      }}
+                      className="relative"
+                      key={x.color}
+                      color={x.color}
+                      size="sm"
+                    >
+                      {x.text}
+                      {x.color == data.color && (
+                        <FaCheckCircle
+                          color="gray"
+                          className="absolute"
+                          style={{
+                            right: "-4px",
+                            top: "-4px",
+                          }}
+                        />
+                      )}
+                    </Badge>
+                  );
                 })}
               </div>
 
@@ -109,9 +124,8 @@ export function ModalAgregarCategoria({openModal, setOpenModal}) {
                         }}
                         className={
                           "relative border-2 p-3 rounded-md justify-items-center m-auto " +
-                          (x.texto == data.icono ? "border-black ": "")
+                          (x.texto == data.icono ? "border-black " : "")
                         }
-
                       >
                         {x.icono}
                         {x.texto == data.icono && (
