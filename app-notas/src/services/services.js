@@ -14,7 +14,6 @@ export const ObtenerNotas = async () => {
     .eq("usuario", ObtenerId())
     .order("favorito", { ascending: false });
 
-    console.log(notas)
   return notas.map((x) => {
     return { ...x, nota_texto: descifrar(x.nota_texto) };
   });

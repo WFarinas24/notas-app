@@ -1,6 +1,7 @@
-import { cifrar } from "./seguridad";
+import { cifrar, descifrar, generarMD5 } from "./seguridad";
 
 export const ObtenerId = () => {
+
   return localStorage.getItem("idUsuario");
 };
 
@@ -9,8 +10,10 @@ export const ObtenerClave = () => {
 };
 
 export const SetUsuaraio = (idUsuario, contrasena) => {
-  localStorage.setItem("idUsuario", idUsuario);
   localStorage.setItem("contrasena", contrasena);
+
+  localStorage.setItem("idUsuario", generarMD5(idUsuario + contrasena));
+
 };
 
 export const cerrarSesion = (idUsuario) => {
