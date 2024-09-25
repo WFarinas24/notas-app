@@ -5,6 +5,9 @@ import { ObtenerNotas } from "./services/services";
 import { Button, Label, TextInput } from "flowbite-react";
 import { EsAutenticado } from "./services/autenticacion";
 import { Login } from "./pages/Login";
+import { TabsComponent } from "./components/TabsComponent";
+import { ModalAgregarCategoria } from "./components/ModalAgregarCategoria";
+import { HeaderApp } from "./components/HeaderApp";
 
 function App() {
   const [notas, setNotas] = useState([]);
@@ -15,7 +18,7 @@ function App() {
   }
 
   useEffect(() => {
-    setautenticado(EsAutenticado())
+    setautenticado(EsAutenticado());
 
     if (autenticado) {
       obtenerDatos();
@@ -25,7 +28,16 @@ function App() {
   return (
     <>
       {EsAutenticado() ? (
-        <NuevaNota notas={notas} actualizarTabla={setNotas} setautenticado={setautenticado}></NuevaNota>
+        //<ModalAgregarCategoria></ModalAgregarCategoria>
+
+        <>
+          <HeaderApp setautenticado={setautenticado}></HeaderApp>
+          <TabsComponent
+            notas={notas}
+            actualizarTabla={setNotas}
+            setautenticado={setautenticado}
+          ></TabsComponent>
+        </>
       ) : (
         <Login setautenticado={setautenticado}></Login>
       )}

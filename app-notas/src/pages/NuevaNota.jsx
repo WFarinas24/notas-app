@@ -26,7 +26,7 @@ export const NuevaNota = ({ notas, actualizarTabla, setautenticado }) => {
 
   return (
     <>
-      <HeaderApp setautenticado={setautenticado}></HeaderApp>
+      
       <Card className="mt-4">
         <h2 className="font-bold">Notas</h2>
         <div>
