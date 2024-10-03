@@ -20,9 +20,9 @@ import { MdSave } from "react-icons/md";
 import { useStoreCategorias, useStoreNotas } from "../services/estadoGlobal";
 import { Dropdown } from "flowbite-react";
 import { ObtenerIdCategoria } from "../services/autenticacion";
+import { Toaster, toast } from "sonner";
+
 export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
-  
-  
   const [texto, setTexto] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [cargando, setCargando] = useState({ id: -1, cargando: false });
@@ -39,17 +39,30 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
   return (
     <>
       <Card className="mt-4">
+        <Toaster position="top-right" richColors  />
         <div className="flex justify-between">
           <h2 className="font-bold">Notas</h2>
           <Dropdown label="Menu" dismissOnClick={false}>
-            <Dropdown.Item onClick={async () => {
-              if(ObtenerIdCategoria() == "null"){
-                
-              }
-              await EliminarCategoria();
-              actualizarNotas()
-              actualizarCategorias()
-            }}> <Label className="text-red-600 flex items-center gap-1" > <HiTrash />Eliminar categoria</Label> </Dropdown.Item>
+            <Dropdown.Item
+              onClick={async () => {
+                if (ObtenerIdCategoria() == "null") {
+                  toast.error('Esta categoria no se puede eliminar')
+                  return;
+                }
+                await EliminarCategoria();
+                actualizarNotas();
+                actualizarCategorias();
+                toast.success('Categoria eliminada')
+
+              }}
+            >
+              {" "}
+              <Label className="text-red-600 flex items-center gap-1">
+                {" "}
+                <HiTrash />
+                Eliminar categoria
+              </Label>{" "}
+            </Dropdown.Item>
           </Dropdown>
         </div>
         <div>

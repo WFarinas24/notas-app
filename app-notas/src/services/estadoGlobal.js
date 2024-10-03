@@ -19,3 +19,11 @@ export const useStoreNotas = create((set) => ({
   notas: [],
   actualizar: async (data) => set({ notas: await ObtenerNotas() }),
 }));
+
+
+
+export const useStoreIdCategoria = create((set) => ({
+    idCategoria: [],
+    actualizar: async (data) => set({  idCategoria : data}),
+  }));
+  

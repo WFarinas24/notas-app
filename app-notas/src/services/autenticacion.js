@@ -26,7 +26,7 @@ export const EsAutenticado = () => {
 
 
 export const ObtenerIdCategoria = () => {
-  return localStorage.getItem("idCategoria") ?? null;
+  return localStorage.getItem("idCategoria") ?? "null";
 };
 
 export const SetIdCategoria = (id = null) => {

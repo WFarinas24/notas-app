@@ -9,19 +9,25 @@ import {
 } from "react-icons/hi";
 import { NuevaNota } from "../pages/NuevaNota";
 import { ModalAgregarCategoria } from "./ModalAgregarCategoria";
-import { useStoreCategorias, useStoreNotas } from "../services/estadoGlobal";
+import { useStoreCategorias, useStoreIdCategoria, useStoreNotas } from "../services/estadoGlobal";
 import { ObtenerCategorias } from "../services/services";
-import { ObtenerIcono } from "../util/Iconos";
-import { SetIdCategoria } from "../services/autenticacion";
+import { ObtenerColorCss, ObtenerIcono } from "../util/Iconos";
+import { ObtenerIdCategoria, SetIdCategoria } from "../services/autenticacion";
 
 export const TabsComponent = ({ notas, actualizarTabla, setautenticado }) => {
   const actualizarCategorias = useStoreCategorias((x) => x.actualizar);
   const actualizarnotas = useStoreNotas((x) => x.actualizar);
   const listaCategorias = useStoreCategorias((x) => x.categorias);
 
+  const actualizarIdCategoria = useStoreIdCategoria((x) => x.actualizar);
+  const categoriaId = useStoreIdCategoria((x) => x.idCategoria);
+
+
   const [openModal, setOpenModal] = useState(false);
 
   async function iniciar() {
+    actualizarIdCategoria(ObtenerIdCategoria());
+    console.log(ObtenerIdCategoria())
     actualizarCategorias();
   }
 
@@ -41,6 +47,7 @@ export const TabsComponent = ({ notas, actualizarTabla, setautenticado }) => {
           {
             nombre: "Importantes",
             icono: "HiUserCircle",
+            id : null
           },
           ...listaCategorias,
         ].map((x) => {
@@ -48,15 +55,19 @@ export const TabsComponent = ({ notas, actualizarTabla, setautenticado }) => {
             <Tooltip content={x.nombre}>
             <Button
               onClick={async() => {
-                SetIdCategoria(x.id);
+                SetIdCategoria(x.id ?? "null");
+                actualizarIdCategoria(x.id ?? "null")
                 actualizarnotas()
               }}
               key={x.id ?? -2}
               className="flex items-center max-w-60"
-              color={"gray"}
+              color={categoriaId == (x.id ?? "null" ) ? x.color : "gray"}
+              style={{
+                borderBottom : "4px solid " + ObtenerColorCss(x.color)
+              }}
             >
               <div className="max-w-md">{ObtenerIcono(x.icono)}</div>
-              <Label>{x.nombre.substring(0, 8)}</Label>
+              <Label className={categoriaId == (x.id ?? "null" )?"text-white" : ""}>{x.nombre.substring(0, 8)}</Label>
             </Button>
             </Tooltip>
           );

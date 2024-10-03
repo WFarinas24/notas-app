@@ -36,16 +36,21 @@ export const iconList = [
 
 
 export const badgeColors = [
-    { text: "Azul", color: "info" },
-    { text: "Negro", color: "gray" },
-    { text: "Rojo", color: "failure" },
-    { text: "Verde", color: "success" },
-    { text: "Amarillo", color: "warning" },
-    { text: "Indigo", color: "indigo" },
-    { text: "Púrpura", color: "purple" },
-    { text: "Rosa", color: "pink" },
+    { text: "Azul", color: "info", cssColor : "rgb(21, 94, 117)"},
+    { text: "Negro", color: "dark" , cssColor : "rgb(31,41,55)"},
+    { text: "Rojo", color: "failure" , cssColor : "rgb(155,28,28)"},
+    { text: "Verde", color: "success" , cssColor : "rgb(3,84,63)"},
+    { text: "Amarillo", color: "warning" , cssColor : "rgb(227, 160, 8)"},
+    { text: "Indigo", color: "blue" , cssColor : "rgb(66,56,157)"},
+    { text: "Púrpura", color: "purple" , cssColor : "rgb(85,33,181)"},
   ];
 
+
+  export const ObtenerColorCss = (color) => {
+    const coloresSeleccionado = badgeColors.find((x) => x.color == color);
+    if (coloresSeleccionado) return coloresSeleccionado.cssColor;
+    return "rgb(21, 94, 117)";
+  };
 
   
 export const ObtenerIcono = (icono) => {

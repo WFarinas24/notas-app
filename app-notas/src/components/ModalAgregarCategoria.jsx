@@ -8,6 +8,7 @@ import { GuardarCategoria } from "../services/services";
 import { badgeColors, iconList } from "../util/Iconos";
 import { useStoreCategorias } from "../services/estadoGlobal";
 
+import { Toaster, toast } from "sonner";
 
 export function ModalAgregarCategoria({
   openModal,
@@ -24,6 +25,8 @@ export function ModalAgregarCategoria({
 
   return (
     <>
+        <Toaster position="top-right" richColors  />
+
       <Modal
         show={openModal}
         size="md"
@@ -118,6 +121,7 @@ export function ModalAgregarCategoria({
             <div className="w-full">
               <Button onClick={async ()=> {
                 await GuardarCategoria({ nombre : data.nombre, color : data.color, icono : data.icono})
+                toast.success('Categoria "' + data.nombre + ' " creada')
                 setdata({
                   icono: "default",
                   color: "info",
