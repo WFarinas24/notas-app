@@ -16,7 +16,11 @@ import { MdStar } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 import { MdSave } from "react-icons/md";
-import { useStoreCategorias, useStoreIdCategoria, useStoreNotas } from "../services/estadoGlobal";
+import {
+  useStoreCategorias,
+  useStoreIdCategoria,
+  useStoreNotas,
+} from "../services/estadoGlobal";
 import { Dropdown } from "flowbite-react";
 import { ObtenerIdCategoria } from "../services/autenticacion";
 import { Toaster, toast } from "sonner";
@@ -39,22 +43,21 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
   return (
     <>
       <Card className="mt-4">
-        <Toaster position="top-right" richColors  />
+        <Toaster position="top-right" richColors />
         <div className="flex justify-between">
           <h2 className="font-bold">Notas</h2>
           <Dropdown label="Menu" dismissOnClick={false}>
             <Dropdown.Item
               onClick={async () => {
                 if (ObtenerIdCategoria() == "null") {
-                  toast.error('Esta categoria no se puede eliminar')
+                  toast.error("Esta categoria no se puede eliminar");
                   return;
                 }
                 await EliminarCategoria();
                 actualizarNotas();
                 actualizarCategorias();
-                toast.success('Categoria eliminada')
+                toast.success("Categoria eliminada");
                 actualizarIdCategoria(ObtenerIdCategoria());
-
               }}
             >
               {" "}
@@ -82,9 +85,15 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
             shadow
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
-                await GuardarNota(texto);
-                setTexto("");
-                actualizarNotas();
+                if (await GuardarNota(texto)) {
+                  setTexto("");
+                  actualizarNotas();
+                  toast.success("Nota guardada!");
+                  return;
+                }
+                toast.error(
+                  "Error al guardar la nota, vuelve a intentarlo mas tarde"
+                );
               }
             }}
           />
@@ -166,8 +175,7 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
                           }}
                         />
                       )}
-                    </Table.Cell>
-                    <Table.Cell className="text-wrap break-words whitespace-nowrap font-medium text-gray-900 dark:text-white items-center">
+
                       {!edit.editar ? (
                         <FaPencilAlt
                           size={24}
@@ -184,7 +192,8 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
                         edit.id == x.id && (
                           <MdSave
                             size={24}
-                            className="hover:scale-125"
+                            color="green"
+                            className="hover:scale-125 animate-bounce"
                             onClick={async () => {
                               await EditarNota(x.id, edit.text);
                               actualizarNotas();
@@ -197,7 +206,8 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
                           />
                         )
                       )}
-
+                    </Table.Cell>
+                    <Table.Cell className="text-wrap break-words whitespace-nowrap font-medium text-gray-900 dark:text-white items-center">
                       {edit.editar && edit.id == x.id ? (
                         <Textarea
                           value={edit.text}

@@ -35,14 +35,14 @@ export const ObtenerCategorias = async () => {
 };
 
 export const GuardarNota = async (texto) => {
+  
   const { data, error } = await cliente
     .from("notas")
     .insert([
-      { usuario: ObtenerId(), nota_texto: cifrar(texto), favorito: false, categoria : ObtenerIdCategoria() },
+      { usuario: ObtenerId(), nota_texto: cifrar(texto), favorito: false, categoria : JSON.parse(ObtenerIdCategoria())},
     ])
     .select();
-
-  return data;
+  return data !== null;
 };
 
 export const GuardarCategoria = async ({ nombre, icono, color }) => {
@@ -50,6 +50,7 @@ export const GuardarCategoria = async ({ nombre, icono, color }) => {
     .from("categorias")
     .insert([{ nombre, icono, color, usuario: ObtenerId() }])
     .select();
+
 };
 
 export const EliminarNota = async (id) => {
