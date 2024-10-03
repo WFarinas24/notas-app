@@ -2,57 +2,25 @@ import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { useRef, useState } from "react";
 
 import { Badge } from "flowbite-react";
-import {
-  HiUserCircle,
-  HiPlusCircle,
-  HiAcademicCap,
-  HiBriefcase,
-  HiBan,
-  HiExclamationCircle,
-  HiHome,
-  HiKey,
-  HiHeart,
-  HiCheckCircle,
-  HiAtSymbol,
-  HiBell,
-  HiCloud,
-} from "react-icons/hi";
+
 import { FaCheckCircle } from "react-icons/fa";
-const iconList = [
-  { texto: "Nuevo", icono: <HiPlusCircle size={32} /> },
-  { texto: "HiAcademicCap", icono: <HiAcademicCap size={32} /> },
-  { texto: "HiBriefcase", icono: <HiBriefcase size={32} /> },
-  { texto: "HiBan", icono: <HiBan size={32} /> },
-  { texto: "HiExclamationCircle", icono: <HiExclamationCircle size={32} /> },
-  { texto: "HiHome", icono: <HiHome size={32} /> },
-  { texto: "HiKey", icono: <HiKey size={32} /> },
-  { texto: "HiHeart", icono: <HiHeart size={32} /> },
-  { texto: "HiCheckCircle", icono: <HiCheckCircle size={32} /> },
-  { texto: "HiAtSymbol", icono: <HiAtSymbol size={32} /> },
-  { texto: "HiBell", icono: <HiBell size={32} /> },
-  { texto: "HiCloud", icono: <HiCloud size={32} /> },
-  { texto: "default", icono: <HiUserCircle size={32} /> },
-];
-const badgeColors = [
-  { text: "Azul", color: "info" },
-  { text: "Negro", color: "gray" },
-  { text: "Rojo", color: "failure" },
-  { text: "Verde", color: "success" },
-  { text: "Amarillo", color: "warning" },
-  { text: "Indigo", color: "indigo" },
-  { text: "Púrpura", color: "purple" },
-  { text: "Rosa", color: "pink" },
-];
+import { GuardarCategoria } from "../services/services";
+import { badgeColors, iconList } from "../util/Iconos";
+import { useStoreCategorias } from "../services/estadoGlobal";
+
 
 export function ModalAgregarCategoria({
   openModal,
   setOpenModal,
-  setPestania,
 }) {
+  const categoriaAlmacen =  useStoreCategorias(x => x.actualizar);
+  
   const [data, setdata] = useState({
     icono: "default",
     color: "info",
+    nombre : ""
   });
+
 
   return (
     <>
@@ -62,7 +30,6 @@ export function ModalAgregarCategoria({
         popup
         onClose={() => {
           setOpenModal(false);
-          setPestania(0);
         }}
       >
         <Modal.Header />
@@ -73,9 +40,12 @@ export function ModalAgregarCategoria({
             </h3>
             <div>
               <div className="block">
-                <Label htmlFor="email" value="Nombre" />
+
+                <Label htmlFor="email" />
               </div>
-              <TextInput id="email" placeholder="Nombre" required />
+              <TextInput id="text" placeholder="Nombre" value={data.nombre} onChange={(e) => { 
+                    setdata({...data, nombre : e.target.value}) }
+                  }  required />
             </div>
             <div>
               <div className="block">
@@ -83,9 +53,9 @@ export function ModalAgregarCategoria({
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {badgeColors.map((x) => {
+                {badgeColors.map((x, id) => {
                   return (
-                    <Badge
+                    <Badge 
                       onClick={() => {
                         setdata({ ...data, color: x.color });
                       }}
@@ -119,6 +89,7 @@ export function ModalAgregarCategoria({
                   {iconList.map((x) => {
                     return (
                       <div
+                      key={x.texto}
                         onClick={() => {
                           setdata({ ...data, icono: x.texto });
                         }}
@@ -145,7 +116,16 @@ export function ModalAgregarCategoria({
             </div>
 
             <div className="w-full">
-              <Button>Crear</Button>
+              <Button onClick={async ()=> {
+                await GuardarCategoria({ nombre : data.nombre, color : data.color, icono : data.icono})
+                setdata({
+                  icono: "default",
+                  color: "info",
+                  nombre : ""
+                })
+                setOpenModal(false);
+                categoriaAlmacen();
+              }}>Crear</Button>
             </div>
           </div>
         </Modal.Body>

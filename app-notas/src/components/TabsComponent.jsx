@@ -1,75 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { Tabs } from "flowbite-react";
+
+import { Button, Label, Tooltip  } from "flowbite-react";
 import {
   HiAdjustments,
   HiClipboardList,
   HiUserCircle,
   HiPlusCircle,
 } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
-import { useRef } from "react";
 import { NuevaNota } from "../pages/NuevaNota";
 import { ModalAgregarCategoria } from "./ModalAgregarCategoria";
+import { useStoreCategorias, useStoreNotas } from "../services/estadoGlobal";
+import { ObtenerCategorias } from "../services/services";
+import { ObtenerIcono } from "../util/Iconos";
+import { SetIdCategoria } from "../services/autenticacion";
 
-const ObtenerIcono = (icono) => {
-  switch (icono) {
-    case "Nuevo":
-      return HiPlusCircle;
+export const TabsComponent = ({ notas, actualizarTabla, setautenticado }) => {
+  const actualizarCategorias = useStoreCategorias((x) => x.actualizar);
+  const actualizarnotas = useStoreNotas((x) => x.actualizar);
+  const listaCategorias = useStoreCategorias((x) => x.categorias);
 
-    default:
-      return HiUserCircle;
-  }
-};
-
-export const TabsComponent = ({
-  notas,
-  actualizarTabla,
-  setautenticado,
-  setNotas,
-  tabs = [
-    {
-      nombre: "Importantes",
-      component: (
-        <NuevaNota
-          notas={notas}
-          actualizarTabla={actualizarTabla}
-          setautenticado={setautenticado}
-
-        ></NuevaNota>
-      ),
-    },
-    {
-      nombre: "Dos",
-    },
-    {
-      nombre: "Nuevo",
-      icon: "Nuevo",
-    },
-  ],
-}) => {
-  const [activeTab, setActiveTab] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+
+  async function iniciar() {
+    actualizarCategorias();
+  }
+
+  useEffect(() => {
+    iniciar();
+  }, []);
 
   return (
     <>
-      <ModalAgregarCategoria setPestania={setActiveTab} setOpenModal={setOpenModal} openModal={openModal} />
-      <Tabs
-        aria-label="Default tabs"
-        variant="default"
-        onActiveTabChange={(tab) => {
-          if (tabs.length - 1 == tab) {
-            setOpenModal(true)
-          }
-        }}
-      >
-        {tabs.map((x) => {
+      <ModalAgregarCategoria
+        setOpenModal={setOpenModal}
+        openModal={openModal}
+      />
+
+      <div className="max-w-5xl flex flex-wrap">
+        {[
+          {
+            nombre: "Importantes",
+            icono: "HiUserCircle",
+          },
+          ...listaCategorias,
+        ].map((x) => {
           return (
-            <Tabs.Item active title={x.nombre} icon={ObtenerIcono(x.icon)}>
-              {x.component}
-            </Tabs.Item>
+            <Tooltip content={x.nombre}>
+            <Button
+              onClick={async() => {
+                SetIdCategoria(x.id);
+                actualizarnotas()
+              }}
+              key={x.id ?? -2}
+              className="flex items-center max-w-60"
+              color={"gray"}
+            >
+              <div className="max-w-md">{ObtenerIcono(x.icono)}</div>
+              <Label>{x.nombre.substring(0, 8)}</Label>
+            </Button>
+            </Tooltip>
           );
         })}
-      </Tabs>
+        
+        <Button onClick={() => setOpenModal(true)} color={"gray"}>
+          <div className="max-w-md ">{ObtenerIcono("Nuevo")}</div>
+          Nuevo
+        </Button>
+      </div>
+      <NuevaNota
+        notas={notas}
+        actualizarTabla={actualizarTabla}
+        setautenticado={setautenticado}
+      ></NuevaNota>
     </>
   );
 };

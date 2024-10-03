@@ -23,3 +23,12 @@ export const cerrarSesion = (idUsuario) => {
 export const EsAutenticado = () => {
   return localStorage.getItem("idUsuario") != null;
 };
+
+
+export const ObtenerIdCategoria = () => {
+  return localStorage.getItem("idCategoria") ?? null;
+};
+
+export const SetIdCategoria = (id = null) => {
+  return localStorage.setItem("idCategoria", id) 
+};

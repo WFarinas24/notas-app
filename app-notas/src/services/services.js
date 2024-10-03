@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { cifrar, descifrar } from "./seguridad";
-import { ObtenerId } from "./autenticacion";
+import { ObtenerId, ObtenerIdCategoria, SetIdCategoria } from "./autenticacion";
+import { useStoreCategorias } from "./estadoGlobal";
 
 const cliente = createClient(
   "https://egfkfiwromclttmbyupi.supabase.co",
@@ -8,34 +9,67 @@ const cliente = createClient(
 );
 
 export const ObtenerNotas = async () => {
-  const { data: notas, error } = await cliente
-    .from("notas")
-    .select("*")
-    .eq("usuario", ObtenerId())
-    .order("favorito", { ascending: false });
 
-  return notas.map((x) => {
+  let consulta = cliente.from("notas").select("*").eq("usuario", ObtenerId())
+  const idCategoria = ObtenerIdCategoria()
+
+  if(idCategoria === "null"){
+    consulta = consulta.is("categoria", null)
+  }else{
+    consulta = consulta.eq("categoria", ObtenerIdCategoria())
+  }
+
+  const { data: notas, error } = await consulta.order("favorito", { ascending: false }).order("modificado", { ascending: false });
+
+  return notas?.map((x) => {
     return { ...x, nota_texto: descifrar(x.nota_texto) };
   });
+};
+
+export const ObtenerCategorias = async () => {
+  const { data: lista, error } = await cliente
+    .from("categorias")
+    .select("*")
+    .eq("usuario", ObtenerId());
+  return lista;
 };
 
 export const GuardarNota = async (texto) => {
   const { data, error } = await cliente
     .from("notas")
-    .insert([{usuario : ObtenerId(), nota_texto: cifrar(texto), favorito : false }])
+    .insert([
+      { usuario: ObtenerId(), nota_texto: cifrar(texto), favorito: false, categoria : ObtenerIdCategoria() },
+    ])
     .select();
 
   return data;
+};
+
+export const GuardarCategoria = async ({ nombre, icono, color }) => {
+  const { data, error } = await cliente
+    .from("categorias")
+    .insert([{ nombre, icono, color, usuario: ObtenerId() }])
+    .select();
 };
 
 export const EliminarNota = async (id) => {
   const { error } = await cliente.from("notas").delete().eq("id", id);
 };
 
+export const EliminarCategoria= async () => {
+
+  if(ObtenerIdCategoria() == "null"){
+    return;
+  }
+  const { error } = await cliente.from("categorias").delete().eq("id", ObtenerIdCategoria());
+  SetIdCategoria(null)
+};
+
+
 export const EstablecerFavorito = async (id, estado) => {
   const { data, error } = await cliente
     .from("notas")
-    .update({ favorito: estado })
+    .update({ favorito: estado, modificado : new Date() })
     .eq("id", id)
     .select();
 };
@@ -43,7 +77,7 @@ export const EstablecerFavorito = async (id, estado) => {
 export const EditarNota = async (id, text) => {
   const { data, error } = await cliente
     .from("notas")
-    .update({ nota_texto: cifrar(text) })
+    .update({ nota_texto: cifrar(text) , modificado : new Date()  })
     .eq("id", id)
     .select();
 };
