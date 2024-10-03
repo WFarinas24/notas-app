@@ -120,8 +120,13 @@ export function ModalAgregarCategoria({
 
             <div className="w-full">
               <Button onClick={async ()=> {
+
+                if(data.nombre?.trim() == ""){
+                  toast.error('Debe ingresar un nombre')
+                  return;
+                }
                 await GuardarCategoria({ nombre : data.nombre, color : data.color, icono : data.icono})
-                toast.success('Categoria "' + data.nombre + ' " creada')
+                toast.success('Categoria "' + data.nombre + '" creada')
                 setdata({
                   icono: "default",
                   color: "info",

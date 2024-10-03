@@ -62,7 +62,7 @@ export const EliminarCategoria= async () => {
     return;
   }
   const { error } = await cliente.from("categorias").delete().eq("id", ObtenerIdCategoria());
-  SetIdCategoria(null)
+  SetIdCategoria("null")
 };
 
 

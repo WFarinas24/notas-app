@@ -6,7 +6,6 @@ import {
   EliminarNota,
   EstablecerFavorito,
   GuardarNota,
-  ObtenerNotas,
 } from "../services/services";
 import { act, useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
@@ -17,7 +16,7 @@ import { MdStar } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 import { MdSave } from "react-icons/md";
-import { useStoreCategorias, useStoreNotas } from "../services/estadoGlobal";
+import { useStoreCategorias, useStoreIdCategoria, useStoreNotas } from "../services/estadoGlobal";
 import { Dropdown } from "flowbite-react";
 import { ObtenerIdCategoria } from "../services/autenticacion";
 import { Toaster, toast } from "sonner";
@@ -31,6 +30,7 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
   const notas = useStoreNotas((x) => x.notas);
   const actualizarNotas = useStoreNotas((x) => x.actualizar);
   const actualizarCategorias = useStoreCategorias((x) => x.actualizar);
+  const actualizarIdCategoria = useStoreIdCategoria((x) => x.actualizar);
 
   useEffect(() => {
     actualizarNotas();
@@ -53,6 +53,7 @@ export const NuevaNota = ({ actualizarTabla, setautenticado }) => {
                 actualizarNotas();
                 actualizarCategorias();
                 toast.success('Categoria eliminada')
+                actualizarIdCategoria(ObtenerIdCategoria());
 
               }}
             >

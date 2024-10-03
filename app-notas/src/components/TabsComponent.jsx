@@ -10,7 +10,6 @@ import {
 import { NuevaNota } from "../pages/NuevaNota";
 import { ModalAgregarCategoria } from "./ModalAgregarCategoria";
 import { useStoreCategorias, useStoreIdCategoria, useStoreNotas } from "../services/estadoGlobal";
-import { ObtenerCategorias } from "../services/services";
 import { ObtenerColorCss, ObtenerIcono } from "../util/Iconos";
 import { ObtenerIdCategoria, SetIdCategoria } from "../services/autenticacion";
 
@@ -67,7 +66,7 @@ export const TabsComponent = ({ notas, actualizarTabla, setautenticado }) => {
               }}
             >
               <div className="max-w-md">{ObtenerIcono(x.icono)}</div>
-              <Label className={categoriaId == (x.id ?? "null" )?"text-white" : ""}>{x.nombre.substring(0, 8)}</Label>
+              <Label className={categoriaId == (x.id ?? "null" )?"text-white" : ""}>{x.nombre.substring(0, 20)}</Label>
             </Button>
             </Tooltip>
           );
